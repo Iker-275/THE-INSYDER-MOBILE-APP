@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:insyder/app_router.dart';
+import 'package:insyder/core/models/user.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../core/bloc/auth/auth_bloc.dart';
 import '../../core/utils/launch_storage.dart';
@@ -56,23 +57,24 @@ class _SignUpPageState extends State<SignUpPage> {
       body: SafeArea(
         child: BlocConsumer<AuthBloc, BaseState<Map<String, dynamic>>>(
           listener: (context, state) {
-            if (state == BaseState.error) {
+            if (state.status.toString().contains("error")) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.error ?? "Error occurred")),
               );
             }
-            if (state == BaseState.success &&
+            if (state.status.toString().contains("success") &&
                 state.data?['registered'] == true) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Account created successfully")),
               );
               // Navigator.pop(context);
-              LaunchStorage.setFirstLaunchDone();
+
               Navigator.pushReplacementNamed(context, AppRoutes.home);
+              LaunchStorage.setFirstLaunchDone();
             }
           },
           builder: (context, state) {
-            final isLoading = state == BaseState.loading;
+            final isLoading = state.status == BaseState.loading;
 
             return SingleChildScrollView(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 36.h),

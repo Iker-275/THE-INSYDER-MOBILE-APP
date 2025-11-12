@@ -8,17 +8,17 @@ class SecureStorageService {
   static const _keyIsAuthor = 'is_author';
 
   /// Save the JWT token securely
-  Future<void> saveToken(String token) async {
+  static Future<void> saveToken(String token) async {
     await _storage.write(key: _keyAuthToken, value: token);
   }
 
   /// Retrieve saved token
-  Future<String?> getToken() async {
+  static Future<String?> getToken() async {
     return await _storage.read(key: _keyAuthToken);
   }
 
   /// Delete the token (used for logout)
-  Future<void> deleteToken() async {
+  static Future<void> deleteToken() async {
     await _storage.delete(key: _keyAuthToken);
   }
 

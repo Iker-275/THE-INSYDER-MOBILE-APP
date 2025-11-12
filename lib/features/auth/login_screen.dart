@@ -42,13 +42,14 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       body: BlocConsumer<AuthBloc, BaseState<Map<String, dynamic>>>(
         listener: (context, state) {
-          if (state == BaseState.success && state.data?['loggedIn'] == true) {
+          var stat = state.status.toString();
+          if (stat.contains("success") && state.data?['loggedIn'] == true) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Login successful!')),
             );
             // TODO: Navigate to home page
             Navigator.pushNamed(context, AppRoutes.home);
-          } else if (state == BaseState.error) {
+          } else if (stat.contains("error")) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error ?? 'Something went wrong')),
             );

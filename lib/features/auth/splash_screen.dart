@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:insyder/app_router.dart';
+import 'package:insyder/core/utils/secure_storage.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/launch_storage.dart';
@@ -44,7 +45,14 @@ class _SplashScreenState extends State<SplashScreen>
       return;
     }
 
-    Navigator.pushReplacementNamed(context, AppRoutes.login);
+    final token = await SecureStorageService.getToken();
+    if (token != null && token.isNotEmpty) {
+      // ApiService.setAuthToken(token);
+
+      Navigator.pushReplacementNamed(context, AppRoutes.home);
+    } else {
+      Navigator.pushReplacementNamed(context, AppRoutes.login);
+    }
   }
 
   @override

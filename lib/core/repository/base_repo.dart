@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../api/api_service.dart';
 import '../utils/constants.dart';
 
@@ -19,7 +21,7 @@ abstract class BaseRepository<T> {
           response.data is List ? response.data : response.data['data'];
       return data.map((e) => fromJson(e)).toList().cast<T>();
     } catch (e) {
-      rethrow;
+      throw _handleDioError(e);
     }
   }
 
@@ -28,7 +30,7 @@ abstract class BaseRepository<T> {
       final response = await apiService.get('$endpoint/$id');
       return fromJson(response.data);
     } catch (e) {
-      rethrow;
+      throw _handleDioError(e);
     }
   }
 
@@ -37,7 +39,7 @@ abstract class BaseRepository<T> {
       final response = await apiService.post(endpoint, data);
       return fromJson(response.data);
     } catch (e) {
-      rethrow;
+      throw _handleDioError(e);
     }
   }
 
@@ -46,7 +48,7 @@ abstract class BaseRepository<T> {
       final response = await apiService.put('$endpoint/$id', data);
       return fromJson(response.data);
     } catch (e) {
-      rethrow;
+      throw _handleDioError(e);
     }
   }
 
@@ -54,7 +56,23 @@ abstract class BaseRepository<T> {
     try {
       await apiService.delete('$endpoint/$id');
     } catch (e) {
-      rethrow;
+      throw _handleDioError(e);
+    }
+  }
+
+  _handleDioError(e) {
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return 'Connection Timeout';
+      case DioExceptionType.badResponse:
+        return '${e.response?.data}';
+      case DioExceptionType.cancel:
+        return 'Request Cancelled';
+      case DioExceptionType.unknown:
+      default:
+        return 'Unexpected Error: ${e.message}';
     }
   }
 }
