@@ -5,6 +5,8 @@ class ApiService {
   final Dio _dio = DioClient.dio;
 
   Future<Response> get(String endpoint, {Map<String, dynamic>? query}) async {
+    // print("endpoint: $endpoint");
+
     return await _dio.get(endpoint, queryParameters: query);
   }
 

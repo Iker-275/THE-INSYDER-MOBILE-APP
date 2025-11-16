@@ -4,9 +4,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:insyder/widgets/custom_navbar.dart';
-
 import 'core/bloc/network_bloc.dart';
 import 'features/home/home_navigator.dart';
+import 'features/profile/profile_navigator.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({super.key});
@@ -99,11 +99,7 @@ class _HomeShellState extends State<HomeShell>
                     HomeNavigatorScreen(),
                     Container(),
                     Container(),
-                    Container(
-                      child: Center(
-                        child: Text("Coming soon!"),
-                      ),
-                    ),
+                    ProfileNavigatorScreen(),
                     NotificationListener<UserScrollNotification>(
                       onNotification: (notification) {
                         _handleScroll(notification);

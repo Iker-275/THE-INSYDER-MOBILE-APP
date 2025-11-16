@@ -16,6 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBack = false,
     this.onBack,
     this.leading,
+    required bool centerTitle,
   });
 
   @override

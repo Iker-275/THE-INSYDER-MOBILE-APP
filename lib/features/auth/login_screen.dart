@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../app_router.dart';
 import '../../core/bloc/auth/auth_bloc.dart';
+import '../../core/utils/launch_storage.dart';
 import '../../widgets/auth_header.dart';
 import '../../widgets/custom_buttons.dart';
 import '../../widgets/custom_textfields.dart';
@@ -49,6 +50,7 @@ class _SignInPageState extends State<SignInPage> {
             );
             // TODO: Navigate to home page
             Navigator.pushNamed(context, AppRoutes.home);
+            LaunchStorage.setFirstLaunchDone();
           } else if (stat.contains("error")) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(state.error ?? 'Something went wrong')),

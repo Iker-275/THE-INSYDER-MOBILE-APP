@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:insyder/core/bloc/article/article_bloc.dart';
 import 'package:insyder/core/bloc/author/author_bloc.dart';
 import 'package:insyder/core/bloc/genre/genre_bloc.dart';
+import 'package:insyder/core/bloc/profile/profile_bloc.dart';
 import 'package:insyder/core/repository/article_repo.dart';
 import 'package:insyder/core/repository/auth_repo.dart';
 import 'package:insyder/core/repository/author_repo.dart';
@@ -47,6 +48,8 @@ class InsyderApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => NetworkBloc()),
+          BlocProvider<ProfileBloc>(
+              create: (_) => ProfileBloc(AuthorRepository(apiService))),
           BlocProvider<AuthBloc>(
             create: (_) =>
                 AuthBloc(AuthRepository(apiService, SecureStorageService())),

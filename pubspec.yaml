@@ -41,6 +41,8 @@ dependencies:
   connectivity_plus:
   flutter_screenutil: ^5.9.3
   shared_preferences:
+  cached_network_image:
+  shimmer:
 
 
 dev_dependencies:

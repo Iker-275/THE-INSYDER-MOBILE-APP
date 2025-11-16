@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+
 import '../api/api_service.dart';
 
 import '../../core/utils/constants.dart';
@@ -21,6 +23,7 @@ class ArticleRepository extends BaseRepository<ArticleModel> {
       final List data = response.data['data'] ?? [];
       return data.map((e) => ArticleModel.fromJson(e)).toList();
     } catch (e) {
+      throw _handleDioError(e);
       rethrow;
     }
   }
@@ -35,15 +38,33 @@ class ArticleRepository extends BaseRepository<ArticleModel> {
         queryParams.entries.map((e) => "${e.key}=${e.value}").join('&');
 
     try {
-      final response = await apiService.get('$endpoint/search?$queryString');
+      final response =
+          await apiService.get('$endpoint/search?title=$queryString');
       final List data = response.data['data'] ?? [];
       return data.map((e) => ArticleModel.fromJson(e)).toList();
     } catch (e) {
+      throw _handleDioError(e);
       rethrow;
     }
   }
 
   Future<void> toggleVisibility(String id, bool visible) async {
     await update(id, {'visible': visible});
+  }
+
+  _handleDioError(e) {
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return 'Connection Timeout';
+      case DioExceptionType.badResponse:
+        return '${e.response?.data}';
+      case DioExceptionType.cancel:
+        return 'Request Cancelled';
+      case DioExceptionType.unknown:
+      default:
+        return 'Unexpected Error: ${e.message}';
+    }
   }
 }

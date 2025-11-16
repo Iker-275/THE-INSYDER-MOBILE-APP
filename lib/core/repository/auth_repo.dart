@@ -24,6 +24,7 @@ class AuthRepository {
 
       if (res['token'] != null) {
         await SecureStorageService.saveToken(res['token']);
+        await SecureStorageService.saveUserId(res['user']['_id']);
 
         final isAuthor = res['author'] == true;
         await _storageService.saveAuthorStatus(isAuthor);
